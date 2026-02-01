@@ -3,12 +3,7 @@ import 'package:provider/provider.dart';
 import '../controller/post_controller.dart';
 
 class AddPostTab extends StatefulWidget {
-  final VoidCallback onPostAdded;
-
-  const AddPostTab({
-    super.key,
-    required this.onPostAdded,
-  });
+  const AddPostTab({super.key});
 
   @override
   State<AddPostTab> createState() => _AddPostTabState();
@@ -20,41 +15,52 @@ class _AddPostTabState extends State<AddPostTab> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = context.read<PostController>();
-
     return Padding(
       padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          TextField(
-            controller: titleController,
-            decoration: const InputDecoration(labelText: 'Title'),
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: bodyController,
-            decoration: const InputDecoration(labelText: 'Body'),
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () async {
-              await controller.addPost(
-                titleController.text,
-                bodyController.text,
-              );
+      child: Consumer<PostController>(
+        builder: (context, controller, _) {
+          return Column(
+            children: [
+              TextField(
+                controller: titleController,
+                decoration: const InputDecoration(labelText: 'Title'),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: bodyController,
+                decoration: const InputDecoration(labelText: 'Body'),
+              ),
+              const SizedBox(height: 20),
 
-              titleController.clear();
-              bodyController.clear();
-              
-              widget.onPostAdded();
+              ElevatedButton(
+                onPressed: controller.loading
+                    ? null
+                    : () async {
+                        final success = await controller.addPost(
+                          titleController.text,
+                          bodyController.text,
+                        );
 
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Post added successfully')),
-              );
-            },
-            child: const Text('Add Post'),
-          ),
-        ],
+                        if (!context.mounted) return;
+
+                        if (success) {
+                          titleController.clear();
+                          bodyController.clear();
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Post added successfully'),
+                            ),
+                          );
+                        }
+                      },
+                child: controller.loading
+                    ? const CircularProgressIndicator()
+                    : const Text('Add Post'),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

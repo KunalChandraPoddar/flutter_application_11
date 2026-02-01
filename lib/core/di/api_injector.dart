@@ -1,30 +1,15 @@
-import 'package:provider/provider.dart';
-import 'package:provider/single_child_widget.dart';
-
 import '../network/dio_client.dart';
 import '../../data/api/post_api_service.dart';
 import '../../data/repository/post_repository.dart';
 import '../../presentation/controller/post_controller.dart';
+import '../../core/network/api_config.dart';
 
-class AppInjector {
-  static List<SingleChildWidget> providers = [
-    Provider(
-      create: (_) => DioClient.getDio(),
-    ),
+class ApiInjector {
+  static PostController providePostController() {
+    final dio = DioClient.create(ApiConfig.postsBaseUrl);
+    final api = PostApiService(dio);
+    final repo = PostRepository(api);
 
-    Provider(
-      create: (context) =>
-          PostApiService(context.read()),
-    ),
-
-    Provider(
-      create: (context) =>
-          PostRepository(context.read()),
-    ),
-
-    ChangeNotifierProvider(
-      create: (context) =>
-          PostController(context.read())..loadPosts(),
-    ),
-  ];
+    return PostController(repo);
+  }
 }

@@ -10,6 +10,8 @@ class PostController extends ChangeNotifier {
   List<PostModel> posts = [];
   bool loading = false;
 
+  bool shouldGoToPostsTab = false;
+
   Future<void> loadPosts() async {
     loading = true;
     notifyListeners();
@@ -21,14 +23,28 @@ class PostController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addPost(String title, String body) async {
+  Future<bool> addPost(String title, String body) async {
+    loading = true;
+    notifyListeners();
+
     final response = await repository.createPost(
       PostModel(userId: 1, title: title, body: body),
     );
 
+    loading = false;
+
     if (response.data != null) {
       posts.insert(0, response.data!);
+      shouldGoToPostsTab = true;
       notifyListeners();
+      return true;
     }
+
+    notifyListeners();
+    return false;
+  }
+
+  void resetNavigationFlag() {
+    shouldGoToPostsTab = false;
   }
 }

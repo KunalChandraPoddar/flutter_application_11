@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 
 class DioClient {
-  static Dio getDio() {
+  static Dio create(String baseUrl) {
     final dio = Dio(
       BaseOptions(
-        baseUrl: 'https://jsonplaceholder.typicode.com/',
+        baseUrl: baseUrl,
         connectTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(seconds: 10),
         headers: {
@@ -12,6 +12,14 @@ class DioClient {
         },
       ),
     );
+
+    dio.interceptors.add(
+      LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+      ),
+    );
+
     return dio;
   }
 }
