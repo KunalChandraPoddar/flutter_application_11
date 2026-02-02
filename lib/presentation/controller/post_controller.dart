@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
+import '../../core/base/base_controller.dart';
+import '../../data/datasource/post_remote_datasource.dart';
 import '../../data/model/post_model.dart';
-import '../../data/repository/post_repository.dart';
 
-class PostController extends ChangeNotifier {
-  final PostRepository repository;
+class PostController extends BaseController with ChangeNotifier {
+  final PostRemoteDataSource remoteDataSource;
 
-  PostController(this.repository);
+  PostController(this.remoteDataSource);
 
-  List<PostModel> posts = [];
   bool loading = false;
-
-  bool shouldGoToPostsTab = false;
+  List<PostModel> posts = [];
 
   Future<void> loadPosts() async {
     loading = true;
     notifyListeners();
 
-    final response = await repository.fetchPosts();
-    posts = response.data ?? [];
+    try {
+      final response = await remoteDataSource.getPosts();
+      posts = response;
+    } on DioException catch (e) {
+      handleError<List<PostModel>>(e);
+    }
 
     loading = false;
     notifyListeners();
@@ -27,24 +31,25 @@ class PostController extends ChangeNotifier {
     loading = true;
     notifyListeners();
 
-    final response = await repository.createPost(
-      PostModel(userId: 1, title: title, body: body),
-    );
+    try {
+      final post = PostModel(
+        title: title,
+        body: body,
+        userId: 1,
+      );
 
-    loading = false;
+      final createdPost = await remoteDataSource.addPost(post);
 
-    if (response.data != null) {
-      posts.insert(0, response.data!);
-      shouldGoToPostsTab = true;
+      posts.insert(0, createdPost);
+      loading = false;
       notifyListeners();
+
       return true;
+    } on DioException catch (e) {
+      loading = false;
+      notifyListeners();
+      handleError<PostModel>(e);
+      return false;
     }
-
-    notifyListeners();
-    return false;
-  }
-
-  void resetNavigationFlag() {
-    shouldGoToPostsTab = false;
   }
 }

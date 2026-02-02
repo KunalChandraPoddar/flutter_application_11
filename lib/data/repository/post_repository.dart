@@ -1,36 +1,27 @@
-import 'package:dio/dio.dart';
-import 'package:flutter_application_11/core/network/http_status.dart';
-import '../../core/base/base_controller.dart';
-import '../../core/network/api_response.dart';
-import '../api/post_api_service.dart';
+import '../datasource/post_remote_datasource.dart';
 import '../model/post_model.dart';
+import '../result/api_result.dart';
 
-class PostRepository extends BaseController {
-  final PostApiService api;
+class PostRepository {
+  final PostRemoteDataSource remote;
 
-  PostRepository(this.api);
+  PostRepository(this.remote);
 
-  Future<ApiResponse<List<PostModel>>> fetchPosts() async {
+  Future<ApiResult<List<PostModel>>> fetchPosts() async {
     try {
-      final response = await api.getPosts();
-      return ApiResponse(
-        data: response,
-        status: HttpStatusEnum.success,
-      );
-    } on DioException catch (e) {
-      return handleError(e);
+      final posts = await remote.getPosts();
+      return ApiResult.success(posts);
+    } catch (e) {
+      return ApiResult.failure('Failed to load posts');
     }
   }
 
-  Future<ApiResponse<PostModel>> createPost(PostModel post) async {
+  Future<ApiResult<PostModel>> createPost(PostModel post) async {
     try {
-      final response = await api.addPost(post);
-      return ApiResponse(
-        data: response,
-        status: HttpStatusEnum.created,
-      );
-    } on DioException catch (e) {
-      return handleError(e);
+      final result = await remote.addPost(post);
+      return ApiResult.success(result);
+    } catch (e) {
+      return ApiResult.failure('Failed to create post');
     }
   }
 }

@@ -3,13 +3,6 @@ import '../network/api_response.dart';
 import '../network/http_status.dart';
 
 class BaseController {
-  ApiResponse<T> handleResponse<T>(Response response, T data) {
-    return ApiResponse<T>(
-      data: data,
-      status: mapStatusCode(response.statusCode),
-    );
-  }
-
   ApiResponse<T> handleError<T>(DioException e) {
     return ApiResponse<T>(
       status: mapStatusCode(e.response?.statusCode),
