@@ -5,7 +5,9 @@ enum HttpStatusEnum {
   unauthorized,
   notFound,
   serverError,
-  unknown
+  clientError, 
+  networkError,
+  unknownError
 }
 
 HttpStatusEnum mapStatusCode(int? code) {
@@ -23,6 +25,6 @@ HttpStatusEnum mapStatusCode(int? code) {
     case 500:
       return HttpStatusEnum.serverError;
     default:
-      return HttpStatusEnum.unknown;
+      return HttpStatusEnum.unknownError;
   }
 }

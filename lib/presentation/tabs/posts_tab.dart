@@ -19,15 +19,12 @@ class PostsTab extends StatelessWidget {
 
     return ListView.separated(
       itemCount: controller.posts.length,
-      separatorBuilder: (_, __) => const Divider(),
-      itemBuilder: (context, index) {
+      separatorBuilder: (_, _) => const Divider(),
+      itemBuilder: (_, index) {
         final post = controller.posts[index];
         return ListTile(
-          title: Text(post.title),
+          title: Text(post.title, style: const TextStyle(fontWeight: FontWeight.bold)),
           subtitle: Text(post.body),
-          leading: CircleAvatar(
-            child: Text(post.id.toString()),
-          ),
         );
       },
     );

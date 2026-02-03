@@ -1,9 +1,15 @@
+import '../../core/network/http_status.dart';
+
 class ApiResult<T> {
   final T? data;
-  final String? error;
+  final String? message;
+  final HttpStatusEnum status;
 
-  ApiResult.success(this.data) : error = null;
-  ApiResult.failure(this.error) : data = null;
+  ApiResult({
+    required this.status,
+    this.data,
+    this.message,
+  });
 
-  bool get isSuccess => data != null;
+  bool get isSuccess => status == HttpStatusEnum.success;
 }

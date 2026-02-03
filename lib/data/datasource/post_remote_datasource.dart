@@ -6,11 +6,7 @@ class PostRemoteDataSource {
 
   PostRemoteDataSource(this.api);
 
-  Future<PostModel> addPost(PostModel post) {
-    return api.addPost(post); // ✅ FIXED
-  }
+  Future<List<PostModel>> getPosts() => api.getPosts();
 
-  Future<List<PostModel>> getPosts() {
-    return api.getPosts();
-  }
+  Future<PostModel> addPost(PostModel post) => api.addPost(post);
 }

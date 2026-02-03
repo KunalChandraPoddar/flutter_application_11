@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
-import '../../core/base/base_controller.dart';
-import '../../data/datasource/post_remote_datasource.dart';
 import '../../data/model/post_model.dart';
+import '../../data/repository/post_repository.dart';
 
-class PostController extends BaseController with ChangeNotifier {
-  final PostRemoteDataSource remoteDataSource;
+class PostController extends ChangeNotifier {
+  final PostRepository repository;
 
-  PostController(this.remoteDataSource);
+  PostController(this.repository);
 
   bool loading = false;
   List<PostModel> posts = [];
+  String? errorMessage;
 
   Future<void> loadPosts() async {
     loading = true;
+    errorMessage = null;
     notifyListeners();
 
-    try {
-      final response = await remoteDataSource.getPosts();
-      posts = response;
-    } on DioException catch (e) {
-      handleError<List<PostModel>>(e);
+    final result = await repository.fetchPosts();
+
+    if (result.isSuccess) {
+      posts = result.data!;
+    } else {
+      errorMessage = result.message;
     }
 
     loading = false;
@@ -28,27 +29,21 @@ class PostController extends BaseController with ChangeNotifier {
   }
 
   Future<bool> addPost(String title, String body) async {
-    loading = true;
-    notifyListeners();
-
-    try {
-      final post = PostModel(
+    final result = await repository.createPost(
+      PostModel(
         title: title,
         body: body,
         userId: 1,
-      );
+      ),
+    );
 
-      final createdPost = await remoteDataSource.addPost(post);
-
-      posts.insert(0, createdPost);
-      loading = false;
+    if (result.isSuccess) {
+      posts.insert(0, result.data!);
       notifyListeners();
-
       return true;
-    } on DioException catch (e) {
-      loading = false;
+    } else {
+      errorMessage = result.message;
       notifyListeners();
-      handleError<PostModel>(e);
       return false;
     }
   }
