@@ -1,8 +1,8 @@
-import '../api/post_api_service.dart';
+import '../api/post_api_client.dart';
 import '../model/post_model.dart';
 
 class PostRemoteDataSource {
-  final PostApiService api;
+  final PostApiClient api;
 
   PostRemoteDataSource(this.api);
 

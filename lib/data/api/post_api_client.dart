@@ -2,11 +2,11 @@ import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 import '../model/post_model.dart';
 
-part 'post_api_service.g.dart';
+part 'post_api_client.g.dart';
 
 @RestApi()
-abstract class PostApiService {
-  factory PostApiService(Dio dio) = _PostApiService;
+abstract class PostApiClient {
+  factory PostApiClient(Dio dio) = _PostApiClient;
 
   @GET('/posts')
   Future<List<PostModel>> getPosts();

@@ -1,30 +1,30 @@
 enum HttpStatusEnum {
-  success,
-  created,
   badRequest,
   unauthorized,
+  forbidden,
   notFound,
-  serverError,
-  clientError, 
-  networkError,
-  unknownError
-}
+  internalServerError,
+  badGateway,
+  unknown, 
+  networkError, 
+  success;
 
-HttpStatusEnum mapStatusCode(int? code) {
-  switch (code) {
-    case 200:
-      return HttpStatusEnum.success;
-    case 201:
-      return HttpStatusEnum.created;
-    case 400:
-      return HttpStatusEnum.badRequest;
-    case 401:
-      return HttpStatusEnum.unauthorized;
-    case 404:
-      return HttpStatusEnum.notFound;
-    case 500:
-      return HttpStatusEnum.serverError;
-    default:
-      return HttpStatusEnum.unknownError;
+  static HttpStatusEnum mapStatusCode(int? code) {
+    switch (code) {
+      case 400:
+        return HttpStatusEnum.badRequest;
+      case 401:
+        return HttpStatusEnum.unauthorized;
+      case 403:
+        return HttpStatusEnum.forbidden;
+      case 404:
+        return HttpStatusEnum.notFound;
+      case 500:
+        return HttpStatusEnum.internalServerError;
+      case 502:
+        return HttpStatusEnum.badGateway;
+      default:
+        return HttpStatusEnum.unknown;
+    }
   }
 }
