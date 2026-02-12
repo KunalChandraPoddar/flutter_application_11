@@ -13,6 +13,14 @@ class PostController extends BaseController {
   final posttitleCtrl = TextEditingController();
   final postbodyCtrl = TextEditingController();
 
+  final currentIndex = 0.obs;
+
+  void changeTab(int index) {
+    currentIndex.value = index;
+  }
+
+  final post = Rxn<PostModel>();
+
   @override
   void onInit() {
     super.onInit();
@@ -49,15 +57,14 @@ class PostController extends BaseController {
       postAdded.value = true;
       return true;
     }
-
     return false;
   }
-
 
   Future<void> submitPost() async {
     final success = await addPost();
 
     if (success) {
+      currentIndex.value = 0;
       Get.snackbar(
         "Success",
         "Post added successfully!",

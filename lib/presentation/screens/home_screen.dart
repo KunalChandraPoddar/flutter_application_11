@@ -10,8 +10,6 @@ class HomeScreen extends StatelessWidget {
 
   final PostController controller = Get.find<PostController>();
 
-  final currentIndex = 0.obs;
-
   @override
   Widget build(BuildContext context) {
     final tabs = [
@@ -23,11 +21,11 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(title: const Text(AppStrings.appTitle), 
       backgroundColor: Colors.blue,),
 
-      body: Obx(() => tabs[currentIndex.value]),
+      body: Obx(() => tabs[controller.currentIndex.value]),
 
       bottomNavigationBar: Obx(() => BottomNavigationBar(
-            currentIndex: currentIndex.value,
-            onTap: (index) => currentIndex.value = index,
+            currentIndex: controller.currentIndex.value,
+            onTap: (index) => controller.currentIndex.value = index,
             items: const [
               BottomNavigationBarItem(
                   icon: Icon(Icons.list), label: 'Posts'),
