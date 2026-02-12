@@ -1,44 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../controller/post_controller.dart';
 
-class PostsTab extends StatefulWidget {
-  final PostController controller;
-  const PostsTab({super.key, required this.controller});
+class PostsTab extends StatelessWidget {
+  PostsTab({super.key});
 
-  @override
-  State<PostsTab> createState() => _PostsTabState();
-}
-
-class _PostsTabState extends State<PostsTab> {
-  @override
-  void initState() {
-    super.initState();
-  }
+  final PostController controller = Get.find<PostController>();
 
   @override
   Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: widget.controller,
-      builder: (context, _) {
-        if (widget.controller.isLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
 
-        if (widget.controller.errorMessage != null) {
-          return Center(child: Text(widget.controller.errorMessage!));
-        }
+      if (controller.errorMessage.value != null) {
+        return Center(child: Text(controller.errorMessage.value!));
+      }
 
-        return RefreshIndicator(
-          onRefresh: widget.controller.getPosts,
-          child: ListView.builder(
-            itemCount: widget.controller.posts.length,
-            itemBuilder: (_, i) => ListTile(
-              title: Text(widget.controller.posts[i].title),
-              subtitle: Text(widget.controller.posts[i].body),
-            ),
-          ),
-        );
-      },
-    );
+      if (controller.posts.isEmpty) {
+        return const Center(child: Text("No Posts"));
+      }
+
+      return ListView.builder(
+        itemCount: controller.posts.length,
+        itemBuilder: (_, i) {
+          final post = controller.posts[i];
+          return ListTile(
+            title: Text(post.title),
+            subtitle: Text(post.body),
+          );
+        },
+      );
+    });
   }
 }

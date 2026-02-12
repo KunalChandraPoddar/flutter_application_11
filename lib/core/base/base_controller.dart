@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_11/core/network/dio_client.dart';
 import 'package:flutter_application_11/data/api/post_api_client.dart';
 import '../network/http_status.dart';
+import 'package:get/get.dart';
 
 typedef ApiErrorHandler = Future<bool> Function(DioException error);
-
-class BaseController extends ChangeNotifier {
-  bool isLoading = false;
+  
+class BaseController extends GetxController {
+  final isLoading = false.obs;
 
   PostApiClient get restClient => DioClient.getRestClient();
 
   void setLoading(bool value) {
-    isLoading = value;
-    notifyListeners();
+    isLoading.value = value;
   }
 
   Future<T?> callApi<T>(

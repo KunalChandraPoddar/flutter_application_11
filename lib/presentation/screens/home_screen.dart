@@ -1,68 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:flutter_application_11/data/constants/app_strings.dart';
 import 'package:flutter_application_11/presentation/controller/post_controller.dart';
-import 'package:provider/provider.dart';
 import '../tabs/posts_tab.dart';
 import '../tabs/add_post_tab.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatelessWidget {
+  HomeScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
+  final PostController controller = Get.find<PostController>();
 
-class _HomeScreenState extends State<HomeScreen> {
-  int currentIndex = 0;
-
-  late final PostController controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = context.read<PostController>();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  void goToPostsTab() {
-    setState(() {
-      currentIndex = 0;
-    });
-  }
+  final currentIndex = 0.obs;
 
   @override
   Widget build(BuildContext context) {
     final tabs = [
-      PostsTab(controller: controller),
-      AddPostTab(
-        controller: controller,
-        onPostAdded: () {
-          setState(() {
-            currentIndex = 0;
-          });
-        },
-      ),
+      PostsTab(),
+      AddPostTab(),
     ];
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Posts App')),
-      body: tabs[currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: (index) {
-          setState(() {
-            currentIndex = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Posts'),
-          BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Add Post'),
-        ],
-      ),
+      appBar: AppBar(title: const Text(AppStrings.appTitle), 
+      backgroundColor: Colors.blue,),
+
+      body: Obx(() => tabs[currentIndex.value]),
+
+      bottomNavigationBar: Obx(() => BottomNavigationBar(
+            currentIndex: currentIndex.value,
+            onTap: (index) => currentIndex.value = index,
+            items: const [
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.list), label: 'Posts'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.add), label: 'Add Post'),
+            ],
+          )),
     );
   }
 }
