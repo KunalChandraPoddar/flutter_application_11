@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_11/data/constants/app_strings.dart';
 import 'package:get/get.dart';
 import '../controller/post_controller.dart';
 
@@ -19,7 +20,7 @@ class PostsTab extends StatelessWidget {
       }
 
       if (controller.posts.isEmpty) {
-        return const Center(child: Text("No Posts"));
+        return const Center(child: Text(AppStrings.noPosts));
       }
 
       return ListView.builder(

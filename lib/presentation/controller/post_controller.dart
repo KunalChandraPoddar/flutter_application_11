@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_11/data/constants/app_strings.dart';
+import 'package:flutter_application_11/presentation/controller/home_controller.dart';
 import '../../core/base/base_controller.dart';
 import '../../data/model/post_model.dart';
 import 'package:get/get.dart';
@@ -12,12 +14,6 @@ class PostController extends BaseController {
 
   final posttitleCtrl = TextEditingController();
   final postbodyCtrl = TextEditingController();
-
-  final currentIndex = 0.obs;
-
-  void changeTab(int index) {
-    currentIndex.value = index;
-  }
 
   final post = Rxn<PostModel>();
 
@@ -35,7 +31,7 @@ class PostController extends BaseController {
     if (result != null) {
       posts.assignAll(result);
     } else {
-      errorMessage.value = "Failed to load posts";
+      errorMessage.value = AppStrings.errorMessage;
     }
   }
 
@@ -64,18 +60,19 @@ class PostController extends BaseController {
     final success = await addPost();
 
     if (success) {
-      currentIndex.value = 0;
+      final homeController = Get.find<HomeController>();
+      homeController.currentIndex.value = 0;
       Get.snackbar(
-        "Success",
-        "Post added successfully!",
+        AppStrings.snackbarSuccessHeading,
+        AppStrings.snackbarSuccessMessage,
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
     } else {
       Get.snackbar(
-        "Error",
-        "Failed to add post",
+        AppStrings.snackbarErrorHeading,
+        AppStrings.snackbarErrorMessage,
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red,
         colorText: Colors.white,
