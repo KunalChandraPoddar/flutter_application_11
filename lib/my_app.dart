@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_11/core/bindings/initialize_bindings.dart';
 import 'package:flutter_application_11/data/constants/app_strings.dart';
 import 'package:get/get.dart';
 import 'package:flutter_application_11/presentation/routes/app_pages.dart';
@@ -10,6 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      initialBinding: InitializeBindings(),
       debugShowCheckedModeBanner: false,
       title: AppStrings.appTitle,
       theme: ThemeData(
