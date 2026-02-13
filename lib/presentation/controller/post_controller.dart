@@ -6,7 +6,6 @@ import '../../data/model/post_model.dart';
 import 'package:get/get.dart';
 
 class PostController extends BaseController {
-  PostController();
 
   final posts = <PostModel>[].obs;
   final errorMessage = RxnString();

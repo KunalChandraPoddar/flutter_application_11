@@ -5,12 +5,11 @@ import '../network/http_status.dart';
 import 'package:get/get.dart';
 
 typedef ApiErrorHandler = Future<bool> Function(DioException error);
-  
+
 class BaseController extends GetxController {
   final isLoading = false.obs;
 
   final PostApiClient restClient = Get.find<PostApiClient>();
-
 
   void setLoading(bool value) {
     isLoading.value = value;
@@ -27,7 +26,7 @@ class BaseController extends GetxController {
       return await request;
     } on DioException catch (e) {
       final status = HttpStatusEnum.mapStatusCode(e.response?.statusCode);
-      debugPrint('API Error → $status');
+      debugPrint('Dio API Error → $status');
 
       if (apiErrorHandler != null) {
         final handled = await apiErrorHandler(e);
@@ -35,9 +34,13 @@ class BaseController extends GetxController {
       } else {
         await onResponseError(e);
       }
+    } catch (e, stackTrace) {
+      debugPrint('Unexpected Error → $e');
+      debugPrint('StackTrace → $stackTrace');
     } finally {
       if (showLoading) setLoading(false);
     }
+
     return null;
   }
 

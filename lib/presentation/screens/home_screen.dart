@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_11/presentation/controller/home_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter_application_11/data/constants/app_strings.dart';
-import 'package:flutter_application_11/presentation/controller/post_controller.dart';
 import '../tabs/posts_tab.dart';
 import '../tabs/add_post_tab.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  final PostController postController = Get.find<PostController>();
   final HomeController homeController = Get.find<HomeController>();
 
   @override
