@@ -1,20 +1,25 @@
-// import 'package:dio/dio.dart';
-// import 'package:flutter_application_11/core/network/api_config.dart';
-// import 'package:flutter_application_11/data/api/post_api_client.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_application_11/core/network/api_config.dart';
+import 'package:flutter_application_11/data/api/post_api_client.dart';
+import 'package:get/get.dart';
 
-// class DioClient {
-//   static Dio create(String baseUrl) {
-//     return Dio(
-//       BaseOptions(
-//         baseUrl: baseUrl,
-//         headers: {'Content-Type': 'application/json'},
-//       ),
-//     );
-//   }
+class DioClient {
+  static void prepareDio() {
+    Get.lazyPut<Dio>(
+      () => Dio(
+        BaseOptions(
+          baseUrl: ApiConfig.postsBaseUrl,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          connectTimeout: const Duration(seconds: 30),
+        ),
+      ),
+      fenix: true,
+    );
 
-//   static PostApiClient getRestClient() {
-//     final baseUrl = ApiConfig.postsBaseUrl;
-//     final dio = create(baseUrl);
-//     return PostApiClient(dio);
-//   }
-// }
+    Get.lazyPut<PostApiClient>(() => PostApiClient(Get.find<Dio>()), fenix: true);
+  }
+}
+

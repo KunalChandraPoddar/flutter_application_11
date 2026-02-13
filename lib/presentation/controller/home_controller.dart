@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-class HomeController extends GetxController{
+class HomeController{
   var currentIndex = 0.obs;
 
   void changeTab(int index) {
