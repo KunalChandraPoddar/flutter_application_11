@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_11/data/constants/app_strings.dart';
-import 'package:flutter_application_11/presentation/controller/post_controller.dart';
+import 'package:flutter_application_11/presentation/controller/add_post_controller.dart';
 import 'package:get/get.dart';
 
 class AddPostTab extends StatelessWidget {
   AddPostTab({super.key});
 
-  final PostController controller = Get.find<PostController>();
+  final AddPostController addPostController = Get.find<AddPostController>();
 
   @override
   Widget build(BuildContext context) {
@@ -14,16 +14,16 @@ class AddPostTab extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          TextField(controller: controller.posttitleCtrl),
+          TextField(controller: addPostController.posttitleCtrl),
           const SizedBox(height: 12),
-          TextField(controller: controller.postbodyCtrl),
+          TextField(controller: addPostController.postbodyCtrl),
           const SizedBox(height: 16),
 
           Obx(() => ElevatedButton(
-                onPressed: controller.isLoading.value
+                onPressed: addPostController.isLoading.value
                     ? null
-                    : controller.submitPost,
-                child: controller.isLoading.value
+                    : addPostController.submitPost,
+                child: addPostController.isLoading.value
                     ? const CircularProgressIndicator()
                     : const Text(AppStrings.addPostButton),
               )),

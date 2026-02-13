@@ -20,4 +20,11 @@ abstract class AppStrings {
 
   static const String snackbarErrorHeading = 'Error';
   static const String snackbarErrorMessage = 'Failed to add post!';
+
+
+  static const String contentTypeName = 'Content-Type';
+  static const String contentTypeValue = 'application/json';
+
+  static const String acceptName = 'Accept';
+  static const String acceptValue = 'application/json';
 }

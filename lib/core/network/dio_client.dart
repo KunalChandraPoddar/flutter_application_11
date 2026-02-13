@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_application_11/core/network/api_config.dart';
 import 'package:flutter_application_11/data/api/post_api_client.dart';
+import 'package:flutter_application_11/data/constants/app_strings.dart';
 import 'package:get/get.dart';
 
 class DioClient {
@@ -10,8 +11,8 @@ class DioClient {
         BaseOptions(
           baseUrl: ApiConfig.postsBaseUrl,
           headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
+            AppStrings.contentTypeName: AppStrings.contentTypeValue,
+            AppStrings.acceptName: AppStrings.acceptValue,
           },
           connectTimeout: const Duration(seconds: 30),
         ),
